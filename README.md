@@ -26,24 +26,16 @@
 - Only works with values.
 
 
-# WeakMap
+# WeakMap and Weakset
 
-- By default the JavaScript engine keeps a value in memory while it is "reachable" and can potentially be used.
+WeakSet can only contain objects, not primitive values. Like WeakMap, the "weakness" refers to the fact that the presence of an object in a WeakSet does not prevent the object from being garbage collected. If there are no other references to an object stored in a WeakSet, that object can be cleaned up by the garbage collector.
 
-- WeakMap is fundamentally different, it doesn't prevent garbage-collection of key objects.
+WeakMap can only have objects as keys. The reason for this limitation is tied to how garbage collection works in JavaScript. The "weakness" (i.e., the ability to be garbage collected) applies to the keys of the WeakMap. Primitive data types (like numbers or strings) are not collected in the same way as objects, so they can't be used as keys in a WeakMap.
 
-- Keys must be objects.
+## Caching Expensive Function Results
 
-- If there are no other references to an object, it will be removed from memory (and automatically from the WeakMap).
+Using a `WeakMap` for caching results of expensive functions based on objects is beneficial. This technique is especially useful when:
 
-- Methods: get, set, delete, has
-
-- Great for usecases where cleaning up is important, i.e. caching.
-
-
-# WeakSet
-
-- Only add objects.
-
-
-With WeakMap and WeakSet, the weakness is the iterations to get all the objects.
+- **The function is computationally intensive**: If the function takes considerable time or resources to compute a result based on an object, caching the result saves future computation time.
+- **The input is object-based**: When the function relies on objects as input, using these objects as keys in a `WeakMap` allows for quick retrieval of cached results without modifying the objects themselves.
+- **Memory efficiency is a concern**: `WeakMap` ensures that once the object is no longer needed (i.e., no other references exist), both the object and its associated cached result can be garbage collected, which helps in managing memory efficiently.
